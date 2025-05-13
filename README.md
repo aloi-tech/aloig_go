@@ -1,6 +1,6 @@
-# alog - Biblioteca de Logging Modular
+# aloig - Biblioteca de Logging Modular
 
-`alog` es una biblioteca de logging modular, extensible y lista para producción basada en [logrus](https://github.com/sirupsen/logrus) con integración de [Sentry](https://sentry.io/). Diseñada para ser utilizada en aplicaciones Go que requieren un sistema de logging robusto con capacidades avanzadas.
+`aloig` es una biblioteca de logging modular, extensible y lista para producción basada en [logrus](https://github.com/sirupsen/logrus) con integración de [Sentry](https://sentry.io/). Diseñada para ser utilizada en aplicaciones Go que requieren un sistema de logging robusto con capacidades avanzadas.
 
 ## Características
 
@@ -15,7 +15,7 @@
 ## Instalación
 
 ```bash
-go get github.com/aloi-tech/aloig/pkg/commons/logger/alog
+go get github.com/aloi-tech/aloig_go/aloig
 ```
 
 ## Uso Básico
@@ -23,11 +23,11 @@ go get github.com/aloi-tech/aloig/pkg/commons/logger/alog
 ### Logger por defecto (Singleton)
 
 ```go
-import "github.com/aloi-tech/aloig/pkg/commons/logger/alog"
+import "github.com/aloi-tech/aloig_go/aloig"
 
 func main() {
     // Obtener el logger singleton
-    log := alog.GetLogger()
+    log := aloig.GetLogger()
     
     // Usar el logger
     log.Info("Aplicación iniciada")
@@ -39,13 +39,13 @@ func main() {
 
 ```go
 import (
-    "github.com/aloi-tech/aloig/pkg/commons/logger/alog"
+    "github.com/aloi-tech/aloig_go/aloig"
     "github.com/sirupsen/logrus"
 )
 
 func main() {
     // Crear configuración personalizada
-    config := alog.Config{
+    config := aloig.Config{
         Environment:      "staging",
         AppName:          "mi-aplicacion",
         SentryDSN:        "https://tu-dsn@sentry.io/123456",
@@ -55,7 +55,7 @@ func main() {
     }
     
     // Crear logger personalizado
-    log := alog.NewLogger(config)
+    log := aloig.NewLogger(config)
     
     // Usar el logger
     log.Debug("Configuración cargada")
@@ -106,7 +106,7 @@ La biblioteca integra automáticamente con Sentry en entornos de producción (`s
 Para asegurar que todos los eventos se envíen antes de que termine el programa, usa:
 
 ```go
-defer alog.FlushSentry()
+defer aloig.FlushSentry()
 ```
 
 ## Ejemplo Completo
@@ -116,12 +116,12 @@ package main
 
 import (
     "errors"
-    "github.com/aloi-tech/aloig/pkg/commons/logger/alog"
+    "github.com/aloi-tech/aloig_go/aloig"
 )
 
 func main() {
     // Obtener el logger
-    log := alog.GetLogger()
+    log := aloig.GetLogger()
     
     // Logging básico
     log.Info("Aplicación iniciada")
@@ -137,7 +137,7 @@ func main() {
     log.WithError(err).Error("No se pudo conectar a la base de datos")
     
     // Asegurar que los eventos de Sentry se envíen
-    defer alog.FlushSentry()
+    defer aloig.FlushSentry()
 }
 ```
 
@@ -149,7 +149,7 @@ Si necesitas extender la funcionalidad con hooks personalizados:
 
 ```go
 import (
-    "github.com/aloi-tech/aloig/pkg/commons/logger/alog"
+    "github.com/aloi-tech/aloig_go/aloig"
     "github.com/sirupsen/logrus"
 )
 
@@ -166,9 +166,9 @@ func (h *CustomHook) Fire(entry *logrus.Entry) error {
 }
 
 // Obtener la instancia subyacente de logrus
-func getLogrusInstance(logger alog.Logger) *logrus.Logger {
+func getLogrusInstance(logger aloig.Logger) *logrus.Logger {
     // Nota: Esto requiere conocimiento interno de la implementación
-    logrusLogger, ok := logger.(*alog.logrusLogger)
+    logrusLogger, ok := logger.(*aloig.logrusLogger)
     if !ok {
         return nil
     }

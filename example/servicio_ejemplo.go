@@ -5,22 +5,22 @@ import (
 	"os"
 	"time"
 
-	"github.com/aloi/alog"
+	aloig "github.com/aloi/alog"
 )
 
 // ServicioEjemplo demuestra cómo usar alog en un servicio real
 type ServicioEjemplo struct {
-	logger alog.Logger
+	logger aloig.Logger
 }
 
 // NuevoServicioEjemplo crea una nueva instancia del servicio con su propio logger configurado
 func NuevoServicioEjemplo() *ServicioEjemplo {
 	// Configuración personalizada para este servicio
-	config := alog.Config{
+	config := aloig.Config{
 		Environment:  os.Getenv("ENVIRONMENT"),
 		AppName:      "servicio-ejemplo",
 		SentryDSN:    os.Getenv("SENTRY_DSN"),
-		Level:        alog.GetLogLevelFromEnv("LOG_LEVEL", "info"),
+		Level:        aloig.GetLogLevelFromEnv("LOG_LEVEL", "info"),
 		HostName:     os.Getenv("HOSTNAME"),
 		ReportCaller: true,
 		CustomFields: map[string]interface{}{
@@ -30,7 +30,7 @@ func NuevoServicioEjemplo() *ServicioEjemplo {
 	}
 
 	return &ServicioEjemplo{
-		logger: alog.NewLogger(config),
+		logger: aloig.NewLogger(config),
 	}
 }
 
@@ -68,5 +68,5 @@ func (s *ServicioEjemplo) Procesar(datos string) error {
 func (s *ServicioEjemplo) Finalizar() {
 	s.logger.Info("Finalizando servicio")
 	// Aseguramos que todos los mensajes de Sentry se envíen antes de salir
-	alog.FlushSentry()
+	aloig.FlushSentry()
 }

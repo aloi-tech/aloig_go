@@ -1,8 +1,8 @@
-// Package alog proporciona una biblioteca de logging modular y extensible
+// Package aloig proporciona una biblioteca de logging modular y extensible
 // basada en logrus con integración a Sentry y capacidades avanzadas de logging.
 //
 // Esta biblioteca puede ser importada y utilizada en cualquier proyecto Go.
-package alog
+package aloig
 
 import (
 	"os"
