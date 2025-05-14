@@ -1,11 +1,11 @@
-package ejemplo
+package example
 
 import (
 	"errors"
 	"os"
 	"time"
 
-	aloig "github.com/aloi/alog"
+	aloig "github.com/aloi-tech/aloig_go/aloig"
 )
 
 // ServicioEjemplo demuestra cómo usar alog en un servicio real
