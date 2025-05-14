@@ -115,7 +115,6 @@ func TestLogrusLogger(t *testing.T) {
 // TestSingletonLogger verifica el comportamiento del singleton
 func TestSingletonLogger(t *testing.T) {
 	// Restablecer el singleton para la prueba
-	instance = nil
 	// No podemos establecer once a nil directamente, pero para pruebas podemos hacer esto:
 	once = sync.Once{}
 

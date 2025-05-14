@@ -121,7 +121,7 @@ func TestSentryIntegration(t *testing.T) {
 // TestConfigureLogger verifica que ConfigureLogger funciona correctamente
 func TestConfigureLogger(t *testing.T) {
 	// Restablecer el singleton para la prueba
-	instance = nil
+	log = nil
 	once = sync.Once{}
 
 	// Configurar con valores personalizados
