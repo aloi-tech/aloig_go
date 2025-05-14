@@ -2,6 +2,7 @@ package aloig
 
 import (
 	"errors"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/mock"
@@ -121,6 +122,7 @@ func TestSentryIntegration(t *testing.T) {
 func TestConfigureLogger(t *testing.T) {
 	// Restablecer el singleton para la prueba
 	instance = nil
+	once = sync.Once{}
 
 	// Configurar con valores personalizados
 	config := Config{

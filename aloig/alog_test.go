@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"os"
+	"sync"
 	"testing"
 
 	"github.com/sirupsen/logrus"
@@ -114,9 +115,9 @@ func TestLogrusLogger(t *testing.T) {
 // TestSingletonLogger verifica el comportamiento del singleton
 func TestSingletonLogger(t *testing.T) {
 	// Restablecer el singleton para la prueba
-	// Para tests reales necesitaríamos un método de reinicio o mock
 	instance = nil
-	// No podemos establecer once a nil, pero podríamos crear un método ResetForTests() para pruebas
+	// No podemos establecer once a nil directamente, pero para pruebas podemos hacer esto:
+	once = sync.Once{}
 
 	logger1 := GetLogger()
 	logger2 := GetLogger()

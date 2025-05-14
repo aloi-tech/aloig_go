@@ -60,6 +60,7 @@ type Config struct {
 	// CustomFields son campos personalizados que se añadirán a todos los logs
 	CustomFields map[string]interface{}
 	HostName     string
+	ServerName   string
 }
 
 // DefaultConfig crea una configuración por defecto
@@ -70,6 +71,7 @@ func DefaultConfig() Config {
 		SentryDSN:        os.Getenv("SENTRY_DSN"),
 		Release:          os.Getenv("APP_NAME") + "@" + os.Getenv("DEPLOY_ID"),
 		HostName:         os.Getenv("HOSTNAME"),
+		ServerName:       os.Getenv("APP_NAME"),
 		TracesSampleRate: 0.2,
 		Level:            logrus.InfoLevel,
 		ReportCaller:     true,
@@ -171,6 +173,7 @@ func initializeSentry(config Config) error {
 		Environment:      config.Environment,
 		Release:          config.Release,
 		AttachStacktrace: true,
+		ServerName:       config.AppName,
 		TracesSampleRate: config.TracesSampleRate,
 		BeforeSend: func(event *sentry.Event, hint *sentry.EventHint) *sentry.Event {
 			return event
