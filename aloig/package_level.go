@@ -28,9 +28,19 @@ func Warn(args ...interface{}) {
 	GetLogger().Warn(args...)
 }
 
+// Warning es un alias de Warn que registra un mensaje de nivel warning
+func Warning(args ...interface{}) {
+	GetLogger().Warning(args...)
+}
+
 // Warnf registra un mensaje de nivel warning con formato usando el logger singleton
 func Warnf(format string, args ...interface{}) {
 	GetLogger().Warnf(format, args...)
+}
+
+// Warningf es un alias de Warnf que registra un mensaje de nivel warning con formato
+func Warningf(format string, args ...interface{}) {
+	GetLogger().Warningf(format, args...)
 }
 
 // Error registra un mensaje de nivel error usando el logger singleton
@@ -65,6 +75,31 @@ func Panic(args ...interface{}) {
 // y luego lanza un panic con el mensaje formateado
 func Panicf(format string, args ...interface{}) {
 	GetLogger().Panicf(format, args...)
+}
+
+// Printf imprime un mensaje formateado usando el logger singleton
+func Printf(format string, args ...interface{}) {
+	GetLogger().Printf(format, args...)
+}
+
+// Print imprime un mensaje usando el logger singleton
+func Print(args ...interface{}) {
+	GetLogger().Print(args...)
+}
+
+// Println imprime un mensaje con nueva línea usando el logger singleton
+func Println(args ...interface{}) {
+	GetLogger().Println(args...)
+}
+
+// Trace registra un mensaje de nivel trace usando el logger singleton
+func Trace(args ...interface{}) {
+	GetLogger().Trace(args...)
+}
+
+// Tracef registra un mensaje de nivel trace con formato usando el logger singleton
+func Tracef(format string, args ...interface{}) {
+	GetLogger().Tracef(format, args...)
 }
 
 // WithField retorna una nueva entrada de log con el campo key=value añadido

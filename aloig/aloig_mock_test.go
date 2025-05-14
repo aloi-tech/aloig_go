@@ -33,7 +33,15 @@ func (m *MockLogger) Warn(args ...interface{}) {
 	m.Called(args)
 }
 
+func (m *MockLogger) Warning(args ...interface{}) {
+	m.Called(args)
+}
+
 func (m *MockLogger) Warnf(format string, args ...interface{}) {
+	m.Called(format, args)
+}
+
+func (m *MockLogger) Warningf(format string, args ...interface{}) {
 	m.Called(format, args)
 }
 
@@ -58,6 +66,26 @@ func (m *MockLogger) Panic(args ...interface{}) {
 }
 
 func (m *MockLogger) Panicf(format string, args ...interface{}) {
+	m.Called(format, args)
+}
+
+func (m *MockLogger) Printf(format string, args ...interface{}) {
+	m.Called(format, args)
+}
+
+func (m *MockLogger) Print(args ...interface{}) {
+	m.Called(args)
+}
+
+func (m *MockLogger) Println(args ...interface{}) {
+	m.Called(args)
+}
+
+func (m *MockLogger) Trace(args ...interface{}) {
+	m.Called(args)
+}
+
+func (m *MockLogger) Tracef(format string, args ...interface{}) {
 	m.Called(format, args)
 }
 

@@ -23,12 +23,19 @@ type Logger interface {
 	Infof(format string, args ...interface{})
 	Warn(args ...interface{})
 	Warnf(format string, args ...interface{})
+	Warning(args ...interface{})
+	Warningf(format string, args ...interface{})
 	Error(args ...interface{})
 	Errorf(format string, args ...interface{})
 	Fatal(args ...interface{})
 	Fatalf(format string, args ...interface{})
 	Panic(args ...interface{})
 	Panicf(format string, args ...interface{})
+	Print(args ...interface{})
+	Printf(format string, args ...interface{})
+	Println(args ...interface{})
+	Trace(args ...interface{})
+	Tracef(format string, args ...interface{})
 	WithField(key string, value interface{}) Logger
 	WithFields(fields map[string]interface{}) Logger
 	WithError(err error) Logger
@@ -124,9 +131,11 @@ func NewLogger(config Config) Logger {
 	if config.Environment != "dev" {
 		logrusInstance.SetOutput(os.Stdout)
 		standardFields := logrus.Fields{
-			"env":      config.Environment,
-			"appname":  config.AppName,
-			"hostname": config.HostName,
+			"env":        config.Environment,
+			"appname":    config.AppName,
+			"hostname":   config.HostName,
+			"servername": config.ServerName,
+			"release":    config.Release,
 		}
 
 		// Añadir campos personalizados
@@ -178,6 +187,13 @@ func initializeSentry(config Config) error {
 		BeforeSend: func(event *sentry.Event, hint *sentry.EventHint) *sentry.Event {
 			return event
 		},
+		Tags: map[string]string{
+			"env":        config.Environment,
+			"appname":    config.AppName,
+			"hostname":   config.HostName,
+			"servername": config.ServerName,
+			"release":    config.Release,
+		},
 	})
 }
 
@@ -225,7 +241,15 @@ func (l *logrusLogger) Warn(args ...interface{}) {
 	l.logger.Warn(args...)
 }
 
+func (l *logrusLogger) Warning(args ...interface{}) {
+	l.logger.Warn(args...)
+}
+
 func (l *logrusLogger) Warnf(format string, args ...interface{}) {
+	l.logger.Warnf(format, args...)
+}
+
+func (l *logrusLogger) Warningf(format string, args ...interface{}) {
 	l.logger.Warnf(format, args...)
 }
 
@@ -251,6 +275,26 @@ func (l *logrusLogger) Panic(args ...interface{}) {
 
 func (l *logrusLogger) Panicf(format string, args ...interface{}) {
 	l.logger.Panicf(format, args...)
+}
+
+func (l *logrusLogger) Print(args ...interface{}) {
+	l.logger.Print(args...)
+}
+
+func (l *logrusLogger) Printf(format string, args ...interface{}) {
+	l.logger.Printf(format, args...)
+}
+
+func (l *logrusLogger) Println(args ...interface{}) {
+	l.logger.Println(args...)
+}
+
+func (l *logrusLogger) Trace(args ...interface{}) {
+	l.logger.Trace(args...)
+}
+
+func (l *logrusLogger) Tracef(format string, args ...interface{}) {
+	l.logger.Tracef(format, args...)
 }
 
 func (l *logrusLogger) WithField(key string, value interface{}) Logger {
