@@ -108,8 +108,8 @@ func isSentryEnvironment(env string) bool {
 }
 
 var (
-	instance Logger
-	once     sync.Once
+	log  Logger
+	once sync.Once
 )
 
 // NewLogger crea una nueva instancia de Logger según la configuración proporcionada
@@ -184,15 +184,15 @@ func initializeSentry(config Config) error {
 // GetLogger devuelve una instancia singleton del logger
 func GetLogger() Logger {
 	once.Do(func() {
-		instance = NewLogger(DefaultConfig())
+		log = NewLogger(DefaultConfig())
 	})
-	return instance
+	return log
 }
 
 // ConfigureLogger configura la instancia singleton del logger con la configuración dada
 func ConfigureLogger(config Config) {
 	once.Do(func() {
-		instance = NewLogger(config)
+		log = NewLogger(config)
 	})
 }
 
