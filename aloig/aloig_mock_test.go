@@ -1,6 +1,7 @@
 package aloig
 
 import (
+	"context"
 	"errors"
 	"sync"
 	"testing"
@@ -102,6 +103,88 @@ func (m *MockLogger) WithFields(fields map[string]interface{}) Logger {
 func (m *MockLogger) WithError(err error) Logger {
 	args := m.Called(err)
 	return args.Get(0).(Logger)
+}
+
+func (m *MockLogger) WithContext(ctx context.Context) Logger {
+	args := m.Called(ctx)
+	return args.Get(0).(Logger)
+}
+
+// Métodos con contexto
+func (m *MockLogger) DebugContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) DebugfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) InfoContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) InfofContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) WarnContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) WarnfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) WarningContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) WarningfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) ErrorContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) ErrorfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) FatalContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) FatalfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) PanicContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) PanicfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) PrintContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) PrintfContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
+}
+
+func (m *MockLogger) PrintlnContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) TraceContext(ctx context.Context, args ...interface{}) {
+	m.Called(ctx, args)
+}
+
+func (m *MockLogger) TracefContext(ctx context.Context, format string, args ...interface{}) {
+	m.Called(ctx, format, args)
 }
 
 // TestMockLogger demuestra cómo usar el mock para pruebas

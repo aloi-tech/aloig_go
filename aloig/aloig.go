@@ -5,6 +5,7 @@
 package aloig
 
 import (
+	"context"
 	"os"
 	"sync"
 	"time"
@@ -39,6 +40,28 @@ type Logger interface {
 	WithField(key string, value interface{}) Logger
 	WithFields(fields map[string]interface{}) Logger
 	WithError(err error) Logger
+	WithContext(ctx context.Context) Logger
+
+	// Métodos con contexto
+	DebugContext(ctx context.Context, args ...interface{})
+	DebugfContext(ctx context.Context, format string, args ...interface{})
+	InfoContext(ctx context.Context, args ...interface{})
+	InfofContext(ctx context.Context, format string, args ...interface{})
+	WarnContext(ctx context.Context, args ...interface{})
+	WarnfContext(ctx context.Context, format string, args ...interface{})
+	WarningContext(ctx context.Context, args ...interface{})
+	WarningfContext(ctx context.Context, format string, args ...interface{})
+	ErrorContext(ctx context.Context, args ...interface{})
+	ErrorfContext(ctx context.Context, format string, args ...interface{})
+	FatalContext(ctx context.Context, args ...interface{})
+	FatalfContext(ctx context.Context, format string, args ...interface{})
+	PanicContext(ctx context.Context, args ...interface{})
+	PanicfContext(ctx context.Context, format string, args ...interface{})
+	PrintContext(ctx context.Context, args ...interface{})
+	PrintfContext(ctx context.Context, format string, args ...interface{})
+	PrintlnContext(ctx context.Context, args ...interface{})
+	TraceContext(ctx context.Context, args ...interface{})
+	TracefContext(ctx context.Context, format string, args ...interface{})
 }
 
 // Config contiene la configuración para el logger
@@ -107,6 +130,7 @@ func (hook *FieldsHook) Fire(entry *logrus.Entry) error {
 // logrusLogger es una implementación de Logger que usa logrus
 type logrusLogger struct {
 	logger *logrus.Logger
+	ctx    context.Context
 }
 
 // isSentryEnvironment verifica si el entorno actual requiere integración con Sentry
@@ -298,7 +322,7 @@ func (l *logrusLogger) Tracef(format string, args ...interface{}) {
 }
 
 func (l *logrusLogger) WithField(key string, value interface{}) Logger {
-	return &logrusLogger{logger: l.logger.WithField(key, value).Logger}
+	return &logrusLogger{logger: l.logger.WithField(key, value).Logger, ctx: l.ctx}
 }
 
 func (l *logrusLogger) WithFields(fields map[string]interface{}) Logger {
@@ -306,11 +330,107 @@ func (l *logrusLogger) WithFields(fields map[string]interface{}) Logger {
 	for k, v := range fields {
 		logrusFields[k] = v
 	}
-	return &logrusLogger{logger: l.logger.WithFields(logrusFields).Logger}
+	return &logrusLogger{logger: l.logger.WithFields(logrusFields).Logger, ctx: l.ctx}
 }
 
 func (l *logrusLogger) WithError(err error) Logger {
-	return &logrusLogger{logger: l.logger.WithError(err).Logger}
+	return &logrusLogger{logger: l.logger.WithError(err).Logger, ctx: l.ctx}
+}
+
+func (l *logrusLogger) WithContext(ctx context.Context) Logger {
+	return &logrusLogger{logger: l.logger, ctx: ctx}
+}
+
+// Implementación de métodos con contexto
+
+func (l *logrusLogger) DebugContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Debug(args...)
+}
+
+func (l *logrusLogger) DebugfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Debugf(format, args...)
+}
+
+func (l *logrusLogger) InfoContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Info(args...)
+}
+
+func (l *logrusLogger) InfofContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Infof(format, args...)
+}
+
+func (l *logrusLogger) WarnContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Warn(args...)
+}
+
+func (l *logrusLogger) WarnfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Warnf(format, args...)
+}
+
+func (l *logrusLogger) WarningContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Warning(args...)
+}
+
+func (l *logrusLogger) WarningfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Warningf(format, args...)
+}
+
+func (l *logrusLogger) ErrorContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Error(args...)
+}
+
+func (l *logrusLogger) ErrorfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Errorf(format, args...)
+}
+
+func (l *logrusLogger) FatalContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Fatal(args...)
+}
+
+func (l *logrusLogger) FatalfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Fatalf(format, args...)
+}
+
+func (l *logrusLogger) PanicContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Panic(args...)
+}
+
+func (l *logrusLogger) PanicfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Panicf(format, args...)
+}
+
+func (l *logrusLogger) PrintContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Print(args...)
+}
+
+func (l *logrusLogger) PrintfContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Printf(format, args...)
+}
+
+func (l *logrusLogger) PrintlnContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Println(args...)
+}
+
+func (l *logrusLogger) TraceContext(ctx context.Context, args ...interface{}) {
+	l.withContextFields(ctx).Trace(args...)
+}
+
+func (l *logrusLogger) TracefContext(ctx context.Context, format string, args ...interface{}) {
+	l.withContextFields(ctx).Tracef(format, args...)
+}
+
+// withContextFields extrae los campos del contexto y los añade al logger
+func (l *logrusLogger) withContextFields(ctx context.Context) Logger {
+	if ctx == nil {
+		return l
+	}
+
+	fields := ExtractContextFields(ctx)
+	if len(fields) == 0 {
+		return l
+	}
+
+	return l.WithFields(fields)
 }
 
 // GetLogLevelFromEnv obtiene el nivel de log desde una variable de entorno

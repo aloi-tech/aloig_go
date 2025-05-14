@@ -1,5 +1,9 @@
 package aloig
 
+import (
+	"context"
+)
+
 // Este archivo contiene funciones de conveniencia a nivel de paquete
 // para permitir el uso de aloig.Info(), aloig.Error(), etc. directamente
 
@@ -115,4 +119,104 @@ func WithFields(fields map[string]interface{}) Logger {
 // WithError retorna una nueva entrada de log con un error añadido
 func WithError(err error) Logger {
 	return GetLogger().WithError(err)
+}
+
+// WithContext retorna una nueva entrada de log con el contexto añadido
+func WithContext(ctx context.Context) Logger {
+	return GetLogger().WithContext(ctx)
+}
+
+// DebugContext registra un mensaje de debug usando el contexto dado
+func DebugContext(ctx context.Context, args ...interface{}) {
+	GetLogger().DebugContext(ctx, args...)
+}
+
+// DebugfContext registra un mensaje de debug formateado usando el contexto dado
+func DebugfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().DebugfContext(ctx, format, args...)
+}
+
+// InfoContext registra un mensaje de info usando el contexto dado
+func InfoContext(ctx context.Context, args ...interface{}) {
+	GetLogger().InfoContext(ctx, args...)
+}
+
+// InfofContext registra un mensaje de info formateado usando el contexto dado
+func InfofContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().InfofContext(ctx, format, args...)
+}
+
+// WarnContext registra un mensaje de advertencia usando el contexto dado
+func WarnContext(ctx context.Context, args ...interface{}) {
+	GetLogger().WarnContext(ctx, args...)
+}
+
+// WarnfContext registra un mensaje de advertencia formateado usando el contexto dado
+func WarnfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().WarnfContext(ctx, format, args...)
+}
+
+// WarningContext registra un mensaje de advertencia usando el contexto dado
+func WarningContext(ctx context.Context, args ...interface{}) {
+	GetLogger().WarningContext(ctx, args...)
+}
+
+// WarningfContext registra un mensaje de advertencia formateado usando el contexto dado
+func WarningfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().WarningfContext(ctx, format, args...)
+}
+
+// ErrorContext registra un mensaje de error usando el contexto dado
+func ErrorContext(ctx context.Context, args ...interface{}) {
+	GetLogger().ErrorContext(ctx, args...)
+}
+
+// ErrorfContext registra un mensaje de error formateado usando el contexto dado
+func ErrorfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().ErrorfContext(ctx, format, args...)
+}
+
+// FatalContext registra un mensaje fatal usando el contexto dado
+func FatalContext(ctx context.Context, args ...interface{}) {
+	GetLogger().FatalContext(ctx, args...)
+}
+
+// FatalfContext registra un mensaje fatal formateado usando el contexto dado
+func FatalfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().FatalfContext(ctx, format, args...)
+}
+
+// PanicContext registra un mensaje de pánico usando el contexto dado
+func PanicContext(ctx context.Context, args ...interface{}) {
+	GetLogger().PanicContext(ctx, args...)
+}
+
+// PanicfContext registra un mensaje de pánico formateado usando el contexto dado
+func PanicfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().PanicfContext(ctx, format, args...)
+}
+
+// PrintContext imprime un mensaje usando el contexto dado
+func PrintContext(ctx context.Context, args ...interface{}) {
+	GetLogger().PrintContext(ctx, args...)
+}
+
+// PrintfContext imprime un mensaje formateado usando el contexto dado
+func PrintfContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().PrintfContext(ctx, format, args...)
+}
+
+// PrintlnContext imprime un mensaje con salto de línea usando el contexto dado
+func PrintlnContext(ctx context.Context, args ...interface{}) {
+	GetLogger().PrintlnContext(ctx, args...)
+}
+
+// TraceContext registra un mensaje de trace usando el contexto dado
+func TraceContext(ctx context.Context, args ...interface{}) {
+	GetLogger().TraceContext(ctx, args...)
+}
+
+// TracefContext registra un mensaje de trace formateado usando el contexto dado
+func TracefContext(ctx context.Context, format string, args ...interface{}) {
+	GetLogger().TracefContext(ctx, format, args...)
 }
