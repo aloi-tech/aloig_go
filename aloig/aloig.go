@@ -103,8 +103,8 @@ func DefaultConfig() Config {
 		HostName:         os.Getenv("HOSTNAME"),
 		ServerName:       os.Getenv("APP_NAME"),
 		TracesSampleRate: 0.2,
-		Level:            logrus.InfoLevel,
-		ReportCaller:     false,
+		Level:            logrus.TraceLevel,
+		ReportCaller:     true,
 		CustomFields:     make(map[string]interface{}),
 	}
 }
