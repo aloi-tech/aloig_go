@@ -4,219 +4,219 @@ import (
 	"context"
 )
 
-// Este archivo contiene funciones de conveniencia a nivel de paquete
-// para permitir el uso de aloig.Info(), aloig.Error(), etc. directamente
+// This file contains package-level convenience functions
+// to allow using aloig.Info(), aloig.Error(), etc. directly
 
-// Debug registra un mensaje de nivel debug usando el logger singleton
+// Debug logs a debug level message using the singleton logger
 func Debug(args ...interface{}) {
 	GetLogger().Debug(args...)
 }
 
-// Debugf registra un mensaje de nivel debug con formato usando el logger singleton
+// Debugf logs a formatted debug level message using the singleton logger
 func Debugf(format string, args ...interface{}) {
 	GetLogger().Debugf(format, args...)
 }
 
-// Info registra un mensaje de nivel info usando el logger singleton
+// Info logs an info level message using the singleton logger
 func Info(args ...interface{}) {
 	GetLogger().Info(args...)
 }
 
-// Infof registra un mensaje de nivel info con formato usando el logger singleton
+// Infof logs a formatted info level message using the singleton logger
 func Infof(format string, args ...interface{}) {
 	GetLogger().Infof(format, args...)
 }
 
-// Warn registra un mensaje de nivel warning usando el logger singleton
+// Warn logs a warning level message using the singleton logger
 func Warn(args ...interface{}) {
 	GetLogger().Warn(args...)
 }
 
-// Warning es un alias de Warn que registra un mensaje de nivel warning
+// Warning is an alias for Warn that logs a warning level message
 func Warning(args ...interface{}) {
 	GetLogger().Warning(args...)
 }
 
-// Warnf registra un mensaje de nivel warning con formato usando el logger singleton
+// Warnf logs a formatted warning level message using the singleton logger
 func Warnf(format string, args ...interface{}) {
 	GetLogger().Warnf(format, args...)
 }
 
-// Warningf es un alias de Warnf que registra un mensaje de nivel warning con formato
+// Warningf is an alias for Warnf that logs a formatted warning level message
 func Warningf(format string, args ...interface{}) {
 	GetLogger().Warningf(format, args...)
 }
 
-// Error registra un mensaje de nivel error usando el logger singleton
+// Error logs an error level message using the singleton logger
 func Error(args ...interface{}) {
 	GetLogger().Error(args...)
 }
 
-// Errorf registra un mensaje de nivel error con formato usando el logger singleton
+// Errorf logs a formatted error level message using the singleton logger
 func Errorf(format string, args ...interface{}) {
 	GetLogger().Errorf(format, args...)
 }
 
-// Fatal registra un mensaje de nivel fatal usando el logger singleton
-// y luego hace que la aplicación termine con un status code no-cero
+// Fatal logs a fatal level message using the singleton logger
+// and then makes the application exit with a non-zero status code
 func Fatal(args ...interface{}) {
 	GetLogger().Fatal(args...)
 }
 
-// Fatalf registra un mensaje de nivel fatal con formato usando el logger singleton
-// y luego hace que la aplicación termine con un status code no-cero
+// Fatalf logs a formatted fatal level message using the singleton logger
+// and then makes the application exit with a non-zero status code
 func Fatalf(format string, args ...interface{}) {
 	GetLogger().Fatalf(format, args...)
 }
 
-// Panic registra un mensaje de nivel panic usando el logger singleton
-// y luego lanza un panic con el mensaje formateado
+// Panic logs a panic level message using the singleton logger
+// and then throws a panic with the formatted message
 func Panic(args ...interface{}) {
 	GetLogger().Panic(args...)
 }
 
-// Panicf registra un mensaje de nivel panic con formato usando el logger singleton
-// y luego lanza un panic con el mensaje formateado
+// Panicf logs a formatted panic level message using the singleton logger
+// and then throws a panic with the formatted message
 func Panicf(format string, args ...interface{}) {
 	GetLogger().Panicf(format, args...)
 }
 
-// Printf imprime un mensaje formateado usando el logger singleton
+// Printf prints a formatted message using the singleton logger
 func Printf(format string, args ...interface{}) {
 	GetLogger().Printf(format, args...)
 }
 
-// Print imprime un mensaje usando el logger singleton
+// Print prints a message using the singleton logger
 func Print(args ...interface{}) {
 	GetLogger().Print(args...)
 }
 
-// Println imprime un mensaje con nueva línea usando el logger singleton
+// Println prints a message with newline using the singleton logger
 func Println(args ...interface{}) {
 	GetLogger().Println(args...)
 }
 
-// Trace registra un mensaje de nivel trace usando el logger singleton
+// Trace logs a trace level message using the singleton logger
 func Trace(args ...interface{}) {
 	GetLogger().Trace(args...)
 }
 
-// Tracef registra un mensaje de nivel trace con formato usando el logger singleton
+// Tracef logs a formatted trace level message using the singleton logger
 func Tracef(format string, args ...interface{}) {
 	GetLogger().Tracef(format, args...)
 }
 
-// WithField retorna una nueva entrada de log con el campo key=value añadido
+// WithField returns a new log entry with the key=value field added
 func WithField(key string, value interface{}) Logger {
 	return GetLogger().WithField(key, value)
 }
 
-// WithFields retorna una nueva entrada de log con los campos añadidos
+// WithFields returns a new log entry with the fields added
 func WithFields(fields map[string]interface{}) Logger {
 	return GetLogger().WithFields(fields)
 }
 
-// WithError retorna una nueva entrada de log con un error añadido
+// WithError returns a new log entry with an error added
 func WithError(err error) Logger {
 	return GetLogger().WithError(err)
 }
 
-// WithContext retorna una nueva entrada de log con el contexto añadido
+// WithContext returns a new log entry with the context added
 func WithContext(ctx context.Context) Logger {
 	return GetLogger().WithContext(ctx)
 }
 
-// DebugContext registra un mensaje de debug usando el contexto dado
+// DebugContext logs a debug message using the given context
 func DebugContext(ctx context.Context, args ...interface{}) {
 	GetLogger().DebugContext(ctx, args...)
 }
 
-// DebugfContext registra un mensaje de debug formateado usando el contexto dado
+// DebugfContext logs a formatted debug message using the given context
 func DebugfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().DebugfContext(ctx, format, args...)
 }
 
-// InfoContext registra un mensaje de info usando el contexto dado
+// InfoContext logs an info message using the given context
 func InfoContext(ctx context.Context, args ...interface{}) {
 	GetLogger().InfoContext(ctx, args...)
 }
 
-// InfofContext registra un mensaje de info formateado usando el contexto dado
+// InfofContext logs a formatted info message using the given context
 func InfofContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().InfofContext(ctx, format, args...)
 }
 
-// WarnContext registra un mensaje de advertencia usando el contexto dado
+// WarnContext logs a warning message using the given context
 func WarnContext(ctx context.Context, args ...interface{}) {
 	GetLogger().WarnContext(ctx, args...)
 }
 
-// WarnfContext registra un mensaje de advertencia formateado usando el contexto dado
+// WarnfContext logs a formatted warning message using the given context
 func WarnfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().WarnfContext(ctx, format, args...)
 }
 
-// WarningContext registra un mensaje de advertencia usando el contexto dado
+// WarningContext logs a warning message using the given context
 func WarningContext(ctx context.Context, args ...interface{}) {
 	GetLogger().WarningContext(ctx, args...)
 }
 
-// WarningfContext registra un mensaje de advertencia formateado usando el contexto dado
+// WarningfContext logs a formatted warning message using the given context
 func WarningfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().WarningfContext(ctx, format, args...)
 }
 
-// ErrorContext registra un mensaje de error usando el contexto dado
+// ErrorContext logs an error message using the given context
 func ErrorContext(ctx context.Context, args ...interface{}) {
 	GetLogger().ErrorContext(ctx, args...)
 }
 
-// ErrorfContext registra un mensaje de error formateado usando el contexto dado
+// ErrorfContext logs a formatted error message using the given context
 func ErrorfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().ErrorfContext(ctx, format, args...)
 }
 
-// FatalContext registra un mensaje fatal usando el contexto dado
+// FatalContext logs a fatal message using the given context
 func FatalContext(ctx context.Context, args ...interface{}) {
 	GetLogger().FatalContext(ctx, args...)
 }
 
-// FatalfContext registra un mensaje fatal formateado usando el contexto dado
+// FatalfContext logs a formatted fatal message using the given context
 func FatalfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().FatalfContext(ctx, format, args...)
 }
 
-// PanicContext registra un mensaje de pánico usando el contexto dado
+// PanicContext logs a panic message using the given context
 func PanicContext(ctx context.Context, args ...interface{}) {
 	GetLogger().PanicContext(ctx, args...)
 }
 
-// PanicfContext registra un mensaje de pánico formateado usando el contexto dado
+// PanicfContext logs a formatted panic message using the given context
 func PanicfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().PanicfContext(ctx, format, args...)
 }
 
-// PrintContext imprime un mensaje usando el contexto dado
+// PrintContext prints a message using the given context
 func PrintContext(ctx context.Context, args ...interface{}) {
 	GetLogger().PrintContext(ctx, args...)
 }
 
-// PrintfContext imprime un mensaje formateado usando el contexto dado
+// PrintfContext prints a formatted message using the given context
 func PrintfContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().PrintfContext(ctx, format, args...)
 }
 
-// PrintlnContext imprime un mensaje con salto de línea usando el contexto dado
+// PrintlnContext prints a message with newline using the given context
 func PrintlnContext(ctx context.Context, args ...interface{}) {
 	GetLogger().PrintlnContext(ctx, args...)
 }
 
-// TraceContext registra un mensaje de trace usando el contexto dado
+// TraceContext logs a trace message using the given context
 func TraceContext(ctx context.Context, args ...interface{}) {
 	GetLogger().TraceContext(ctx, args...)
 }
 
-// TracefContext registra un mensaje de trace formateado usando el contexto dado
+// TracefContext logs a formatted trace message using the given context
 func TracefContext(ctx context.Context, format string, args ...interface{}) {
 	GetLogger().TracefContext(ctx, format, args...)
 }

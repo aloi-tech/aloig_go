@@ -1,41 +1,41 @@
-# aloig - Biblioteca de Logging Modular
+# aloig - Modular Logging Library
 
-`aloig` es una biblioteca de logging modular, extensible y lista para producción basada en [logrus](https://github.com/sirupsen/logrus) con integración de [Sentry](https://sentry.io/). Diseñada para ser utilizada en aplicaciones Go que requieren un sistema de logging robusto con capacidades avanzadas.
+`aloig` is a modular, extensible, and production-ready logging library based on [logrus](https://github.com/sirupsen/logrus) with [Sentry](https://sentry.io/) integration. Designed for Go applications that require a robust logging system with advanced capabilities.
 
-## Características
+## Features
 
-- ✅ **Interfaz simple y estructurada** - API intuitiva y fácil de usar
-- ✅ **Soporte para entornos múltiples** - Formatos diferentes según el entorno (JSON para producción)
-- ✅ **Integración con Sentry** - Reporte automático de errores en entornos productivos
-- ✅ **Campos personalizables** - Añade información contextual a todos tus logs
-- ✅ **Configuración flexible** - Adapta el comportamiento del logger a tus necesidades
-- ✅ **Singleton o múltiples instancias** - Usa la instancia global o crea múltiples loggers
-- ✅ **Totalmente compatible con logrus** - Aprovecha el ecosistema de logrus
+- ✅ **Simple and structured interface** - Intuitive and easy-to-use API
+- ✅ **Multi-environment support** - Different formats based on environment (JSON for production)
+- ✅ **Sentry integration** - Automatic error reporting in production environments
+- ✅ **Customizable fields** - Add contextual information to all your logs
+- ✅ **Flexible configuration** - Adapt logger behavior to your needs
+- ✅ **Singleton or multiple instances** - Use the global instance or create multiple loggers
+- ✅ **Fully compatible with logrus** - Leverage the logrus ecosystem
 
-## Instalación
+## Installation
 
 ```bash
 go get github.com/aloi-tech/aloig_go/aloig
 ```
 
-## Uso Básico
+## Basic Usage
 
-### Logger por defecto (Singleton)
+### Default Logger (Singleton)
 
 ```go
 import "github.com/aloi-tech/aloig_go/aloig"
 
 func main() {
-    // Obtener el logger singleton
+    // Get the singleton logger
     log := aloig.GetLogger()
     
-    // Usar el logger
-    log.Info("Aplicación iniciada")
-    log.WithField("usuario", "admin").Info("Usuario conectado")
+    // Use the logger
+    log.Info("Application started")
+    log.WithField("user", "admin").Info("User connected")
 }
 ```
 
-### Logger personalizado
+### Custom Logger
 
 ```go
 import (
@@ -44,142 +44,177 @@ import (
 )
 
 func main() {
-    // Crear configuración personalizada
+    // Create custom configuration
     config := aloig.Config{
         Environment:      "staging",
-        AppName:          "mi-aplicacion",
-        SentryDSN:        "https://tu-dsn@sentry.io/123456",
+        AppName:          "my-application",
+        SentryDSN:        "https://your-dsn@sentry.io/123456",
         Level:            logrus.DebugLevel,
         ReportCaller:     true,
-        CustomFields:     map[string]interface{}{"servicio": "api"},
+        CustomFields:     map[string]interface{}{"service": "api"},
     }
     
-    // Crear logger personalizado
+    // Create custom logger
     log := aloig.NewLogger(config)
     
-    // Usar el logger
-    log.Debug("Configuración cargada")
+    // Use the logger
+    log.Debug("Configuration loaded")
 }
 ```
 
-## Configuración
+## Configuration
 
-La estructura `Config` permite personalizar el comportamiento del logger:
+The `Config` structure allows you to customize logger behavior:
 
 ```go
 type Config struct {
-    Environment      string                  // Entorno: dev, staging, prod, etc.
-    AppName          string                  // Nombre de la aplicación
-    SentryDSN        string                  // DSN para la integración con Sentry
-    Release          string                  // Versión de la aplicación
-    TracesSampleRate float64                 // Tasa de muestreo para Sentry (0.0-1.0)
-    Level            logrus.Level            // Nivel mínimo de logging
-    ReportCaller     bool                    // Reportar la función que hizo el log
-    CustomFields     map[string]interface{}  // Campos adicionales en todos los logs
+    Environment      string                  // Environment: dev, staging, prod, etc.
+    AppName          string                  // Application name
+    SentryDSN        string                  // DSN for Sentry integration
+    Release          string                  // Application version
+    TracesSampleRate float64                 // Sampling rate for Sentry (0.0-1.0)
+    Level            logrus.Level            // Minimum logging level
+    ReportCaller     bool                    // Report the function that made the log
+    CustomFields     map[string]interface{}  // Additional fields in all logs
 }
 ```
 
-### Configuración por defecto
+### Default Configuration
 
-La función `DefaultConfig()` crea una configuración basada en variables de entorno:
+The `DefaultConfig()` function creates a configuration based on environment variables:
 
-- `ENVIRONMENT` - Entorno de la aplicación
-- `APP_NAME` - Nombre de la aplicación
-- `SENTRY_DSN` - DSN para Sentry
-- `DEPLOY_ID` - ID del despliegue (para versionado)
+- `ENVIRONMENT` - Application environment
+- `APP_NAME` - Application name
+- `SENTRY_DSN` - Sentry DSN
+- `DEPLOY_ID` - Deployment ID (for versioning)
 
-## Niveles de Logging
+## Logging Levels
 
-Los niveles disponibles son (de menor a mayor severidad):
+Available levels (from lowest to highest severity):
 
-- `Debug` - Información detallada para depuración
-- `Info` - Información general sobre el funcionamiento normal
-- `Warn` - Advertencias que no interrumpen el funcionamiento
-- `Error` - Errores que afectan a una operación específica
-- `Fatal` - Errores graves que provocan la terminación del programa
-- `Panic` - Errores críticos que provocan un panic
+- `Debug` - Detailed information for debugging
+- `Info` - General information about normal operation
+- `Warn` - Warnings that don't interrupt operation
+- `Error` - Errors that affect a specific operation
+- `Fatal` - Critical errors that cause program termination
+- `Panic` - Critical errors that cause a panic
 
-## Integración con Sentry
+## Advanced Features
 
-La biblioteca integra automáticamente con Sentry en entornos de producción (`staging`, `sandbox` o `prod`). Los eventos de nivel `Error`, `Fatal` y `Panic` se envían a Sentry.
+### Context-Aware Logging
 
-Para asegurar que todos los eventos se envíen antes de que termine el programa, usa:
-
-```go
-defer aloig.FlushSentry()
-```
-
-## Ejemplo Completo
+`aloig` provides context-aware logging functions that automatically include trace information:
 
 ```go
-package main
-
 import (
-    "errors"
+    "context"
     "github.com/aloi-tech/aloig_go/aloig"
 )
+
+func handleRequest(ctx context.Context) {
+    // Add trace information to context
+    ctx = aloig.WithTraceID(ctx, "trace-123")
+    ctx = aloig.WithRequestID(ctx, "req-456")
+    ctx = aloig.WithUserID(ctx, "user-789")
+    
+    // Log with context - automatically includes trace information
+    aloig.InfoContext(ctx, "Processing request")
+    aloig.ErrorContext(ctx, "Database connection failed")
+}
+```
+
+### Package-Level Functions
+
+For convenience, `aloig` provides package-level functions that use the singleton logger:
+
+```go
+import "github.com/aloi-tech/aloig_go/aloig"
 
 func main() {
-    // Obtener el logger
-    log := aloig.GetLogger()
+    // Direct usage without getting logger instance
+    aloig.Info("Application started")
+    aloig.WithField("service", "api").Info("Service initialized")
     
-    // Logging básico
-    log.Info("Aplicación iniciada")
-    
-    // Logging con campos adicionales
-    log.WithFields(map[string]interface{}{
-        "usuario_id": 12345,
-        "accion":     "login",
-    }).Info("Usuario ha iniciado sesión")
-    
-    // Logging de errores
-    err := errors.New("error de conexión")
-    log.WithError(err).Error("No se pudo conectar a la base de datos")
-    
-    // Asegurar que los eventos de Sentry se envíen
-    defer aloig.FlushSentry()
+    // Context-aware functions
+    ctx := aloig.WithTraceID(context.Background(), "trace-123")
+    aloig.InfoContext(ctx, "Request processed")
 }
 ```
 
-## Personalización Avanzada
-
-### Agregar Hooks de logrus
-
-Si necesitas extender la funcionalidad con hooks personalizados:
+### Custom Fields and Chaining
 
 ```go
-import (
-    "github.com/aloi-tech/aloig_go/aloig"
-    "github.com/sirupsen/logrus"
-)
+// Add custom fields
+log := aloig.GetLogger()
+log.WithField("user_id", "123").Info("User action")
 
-// Tu hook personalizado
-type CustomHook struct{}
+// Chain multiple fields
+log.WithFields(map[string]interface{}{
+    "user_id": "123",
+    "action":  "login",
+    "ip":      "192.168.1.1",
+}).Info("User logged in")
 
-func (h *CustomHook) Levels() []logrus.Level {
-    return logrus.AllLevels
-}
-
-func (h *CustomHook) Fire(entry *logrus.Entry) error {
-    // Lógica personalizada
-    return nil
-}
-
-// Obtener la instancia subyacente de logrus
-func getLogrusInstance(logger aloig.Logger) *logrus.Logger {
-    // Nota: Esto requiere conocimiento interno de la implementación
-    logrusLogger, ok := logger.(*aloig.logrusLogger)
-    if !ok {
-        return nil
-    }
-    return logrusLogger.logger
-}
+// Add error information
+err := someFunction()
+log.WithError(err).Error("Operation failed")
 ```
 
-## Contribuciones
+## Environment-Specific Behavior
 
-Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request.
+### Development Environment
 
-## Licencia
+In development (`ENVIRONMENT=dev`):
+- Uses text format for human-readable logs
+- Includes colors and timestamps
+- No Sentry integration
 
-[MIT](LICENSE) 
+### Production Environment
+
+In production (`ENVIRONMENT=prod`, `staging`, `sandbox`):
+- Uses JSON format for structured logging
+- Includes automatic fields (environment, app name, hostname, etc.)
+- Sentry integration for error reporting
+- Automatic stack traces for error levels
+
+## Sentry Integration
+
+When configured with a Sentry DSN, `aloig` automatically:
+- Reports errors, fatal, and panic levels to Sentry
+- Includes context information (trace ID, user ID, etc.)
+- Provides stack traces for better debugging
+- Flushes pending events on application shutdown
+
+```go
+// Configure with Sentry
+config := aloig.Config{
+    Environment: "prod",
+    AppName:     "my-app",
+    SentryDSN:   "https://your-dsn@sentry.io/123456",
+}
+
+log := aloig.NewLogger(config)
+
+// Errors will be automatically reported to Sentry
+log.Error("Database connection failed")
+```
+
+## Examples
+
+See the `example/` directory for complete usage examples:
+
+- `trace_example.go` - HTTP server with trace middleware
+- `servicio_ejemplo.go` - Service example with custom configuration
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 

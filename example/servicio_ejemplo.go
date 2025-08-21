@@ -8,65 +8,65 @@ import (
 	aloig "github.com/aloi-tech/aloig_go/aloig"
 )
 
-// ServicioEjemplo demuestra cómo usar alog en un servicio real
-type ServicioEjemplo struct {
+// ExampleService demonstrates how to use alog in a real service
+type ExampleService struct {
 	logger aloig.Logger
 }
 
-// NuevoServicioEjemplo crea una nueva instancia del servicio con su propio logger configurado
-func NuevoServicioEjemplo() *ServicioEjemplo {
-	// Configuración personalizada para este servicio
+// NewExampleService creates a new service instance with its own configured logger
+func NewExampleService() *ExampleService {
+	// Custom configuration for this service
 	config := aloig.Config{
 		Environment:  os.Getenv("ENVIRONMENT"),
-		AppName:      "servicio-ejemplo",
+		AppName:      "example-service",
 		SentryDSN:    os.Getenv("SENTRY_DSN"),
 		Level:        aloig.GetLogLevelFromEnv("LOG_LEVEL", "info"),
 		HostName:     os.Getenv("HOSTNAME"),
 		ReportCaller: true,
 		CustomFields: map[string]interface{}{
-			"modulo":  "servicio-ejemplo",
+			"module":  "example-service",
 			"version": "1.0.0",
 		},
 	}
 
-	return &ServicioEjemplo{
+	return &ExampleService{
 		logger: aloig.NewLogger(config),
 	}
 }
 
-// Iniciar inicia el servicio y registra información en el log
-func (s *ServicioEjemplo) Iniciar() error {
-	s.logger.Info("Iniciando servicio de ejemplo")
+// Start starts the service and logs information
+func (s *ExampleService) Start() error {
+	s.logger.Info("Starting example service")
 
-	// Ejemplo de uso de campos adicionales
-	s.logger.WithField("timestamp", time.Now().Unix()).Info("Servicio inicializado correctamente")
+	// Example of using additional fields
+	s.logger.WithField("timestamp", time.Now().Unix()).Info("Service initialized successfully")
 
 	return nil
 }
 
-// Procesar simula un proceso con posibles errores para demostrar el logging de errores
-func (s *ServicioEjemplo) Procesar(datos string) error {
+// Process simulates a process with possible errors to demonstrate error logging
+func (s *ExampleService) Process(data string) error {
 	logger := s.logger.WithFields(map[string]interface{}{
-		"operacion": "procesar",
-		"datos":     datos,
+		"operation": "process",
+		"data":      data,
 	})
 
-	logger.Debug("Iniciando procesamiento de datos")
+	logger.Debug("Starting data processing")
 
-	// Simulación de un error
-	if datos == "" {
-		err := errors.New("datos vacíos")
-		logger.WithError(err).Error("Error al procesar datos vacíos")
+	// Simulation of an error
+	if data == "" {
+		err := errors.New("empty data")
+		logger.WithError(err).Error("Error processing empty data")
 		return err
 	}
 
-	logger.Info("Datos procesados correctamente")
+	logger.Info("Data processed successfully")
 	return nil
 }
 
-// Finalizar finaliza el servicio y asegura que todos los logs se envíen
-func (s *ServicioEjemplo) Finalizar() {
-	s.logger.Info("Finalizando servicio")
-	// Aseguramos que todos los mensajes de Sentry se envíen antes de salir
+// Finish finalizes the service and ensures all logs are sent
+func (s *ExampleService) Finish() {
+	s.logger.Info("Finishing service")
+	// Ensure all Sentry messages are sent before exiting
 	aloig.FlushSentry()
 }
