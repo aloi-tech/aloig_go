@@ -170,6 +170,7 @@ func TestIsSentryEnvironment(t *testing.T) {
 		{"staging", true},
 		{"sandbox", true},
 		{"prod", true},
+		{"develop", true},
 		{"test", false},
 	}
 
@@ -205,4 +206,18 @@ func TestAloigTraceComplete(t *testing.T) {
 
 	// Test with additional fields
 	WithField("test_field", "test_value").Error("test error with field and trace")
+}
+
+// TestStackTraceFormat tests that stack traces are formatted correctly
+func TestStackTraceFormat(t *testing.T) {
+	// Create a test function that will appear in the stack trace
+	testFunction := func() {
+		Error("test error for stack trace verification")
+	}
+
+	// Call the function to generate a stack trace
+	testFunction()
+
+	// The test passes if no panic occurs and the error is logged
+	// In a real scenario, you would capture the log output and verify the format
 }

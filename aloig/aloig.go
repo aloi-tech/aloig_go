@@ -149,16 +149,16 @@ func (f *CallerJSONFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 	// Add stack trace for error levels and above
 	if entry.Level >= logrus.ErrorLevel {
-		// Get stack trace
-		stack := make([]byte, 4096)
+		// Get stack trace with more detail
+		stack := make([]byte, 8192) // Increased buffer size
 		length := runtime.Stack(stack, false)
 		stackStr := string(stack[:length])
 
-		// Clean and format the stack trace
+		// Parse and format the stack trace more clearly
 		lines := strings.Split(stackStr, "\n")
 		var cleanStack []string
+
 		for _, line := range lines {
-			line = strings.TrimSpace(line)
 			if line != "" && !strings.Contains(line, "runtime/debug.Stack") &&
 				!strings.Contains(line, "github.com/sirupsen/logrus") &&
 				!strings.Contains(line, "aloig.(*CallerJSONFormatter).Format") {
@@ -191,7 +191,7 @@ type logrusLogger struct {
 
 // isSentryEnvironment checks if the current environment requires Sentry integration
 func isSentryEnvironment(env string) bool {
-	return env == "staging" || env == "sandbox" || env == "prod"
+	return env == "staging" || env == "sandbox" || env == "prod" || env == "develop"
 }
 
 var (
