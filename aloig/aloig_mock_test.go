@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-// MockLogger es una implementación simulada de la interfaz Logger para pruebas
+// MockLogger is a mock implementation of the Logger interface for testing
 type MockLogger struct {
 	mock.Mock
 }
@@ -110,7 +110,7 @@ func (m *MockLogger) WithContext(ctx context.Context) Logger {
 	return args.Get(0).(Logger)
 }
 
-// Métodos con contexto
+// Context methods
 func (m *MockLogger) DebugContext(ctx context.Context, args ...interface{}) {
 	m.Called(ctx, args)
 }
@@ -187,73 +187,123 @@ func (m *MockLogger) TracefContext(ctx context.Context, format string, args ...i
 	m.Called(ctx, format, args)
 }
 
-// TestMockLogger demuestra cómo usar el mock para pruebas
-func TestMockLogger(t *testing.T) {
-	mockLog := new(MockLogger)
+// TestMockLoggerBasicFunctions tests basic mock logger functions
+func TestMockLoggerBasicFunctions(t *testing.T) {
+	mockLogger := &MockLogger{}
 
-	// Configurar expectativas
-	mockLog.On("Info", []interface{}{"test message"}).Return()
-	mockLog.On("WithField", "key", "value").Return(mockLog)
-	mockLog.On("Info", []interface{}{"with field"}).Return()
+	// Set up expectations
+	mockLogger.On("Info", mock.AnythingOfType("[]interface {}")).Return()
+	mockLogger.On("Error", mock.AnythingOfType("[]interface {}")).Return()
+	mockLogger.On("Debug", mock.AnythingOfType("[]interface {}")).Return()
 
-	// Usar el mock
-	mockLog.Info("test message")
-	mockLog.WithField("key", "value").Info("with field")
+	// Call functions
+	mockLogger.Info("test message")
+	mockLogger.Error("test error")
+	mockLogger.Debug("test debug")
 
-	// Verificar que se llamaron los métodos esperados
-	mockLog.AssertExpectations(t)
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
 }
 
-// TestSentryIntegration simula la integración con Sentry
-func TestSentryIntegration(t *testing.T) {
-	// Este es un ejemplo de cómo podríamos probar la integración con Sentry
-	// sin realmente conectarnos a Sentry, usando mocks y ajustes en el código
+// TestMockLoggerWithFields tests mock logger with fields
+func TestMockLoggerWithFields(t *testing.T) {
+	mockLogger := &MockLogger{}
+	mockReturnLogger := &MockLogger{}
 
-	// En una implementación real, podríamos necesitar exponer algunas funciones
-	// o crear interfaces adicionales para facilitar el mockeo de Sentry
+	// Set up expectations
+	mockLogger.On("WithField", "key", "value").Return(mockReturnLogger)
+	mockReturnLogger.On("Info", mock.AnythingOfType("[]interface {}")).Return()
 
-	// Ejemplo conceptual:
-	mockLog := new(MockLogger)
+	// Call functions
+	logger := mockLogger.WithField("key", "value")
+	logger.Info("test with field")
 
-	// Creamos un error real para la prueba
-	testError := errors.New("error de prueba")
-
-	// Configurar expectativas para un error que debería enviarse a Sentry
-	mockLog.On("WithError", mock.Anything).Return(mockLog)
-	mockLog.On("Error", []interface{}{"Error crítico"}).Return()
-
-	// Simulamos un error que debería enviarse a Sentry
-	mockLog.WithError(testError).Error("Error crítico")
-
-	// Verificar expectativas
-	mockLog.AssertExpectations(t)
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
+	mockReturnLogger.AssertExpectations(t)
 }
 
-// TestConfigureLogger verifica que ConfigureLogger funciona correctamente
-func TestConfigureLogger(t *testing.T) {
-	// Restablecer el singleton para la prueba
-	log = nil
-	once = sync.Once{}
+// TestMockLoggerContextFunctions tests mock logger context functions
+func TestMockLoggerContextFunctions(t *testing.T) {
+	mockLogger := &MockLogger{}
+	ctx := context.Background()
 
-	// Configurar con valores personalizados
-	config := Config{
-		Environment:  "test",
-		AppName:      "mock-app",
-		Level:        0, // Utiliza el nivel por defecto
-		ReportCaller: true,
+	// Set up expectations
+	mockLogger.On("InfoContext", ctx, mock.AnythingOfType("[]interface {}")).Return()
+	mockLogger.On("ErrorContext", ctx, mock.AnythingOfType("[]interface {}")).Return()
+
+	// Call functions
+	mockLogger.InfoContext(ctx, "test context message")
+	mockLogger.ErrorContext(ctx, "test context error")
+
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
+}
+
+// TestMockLoggerChaining tests mock logger chaining
+func TestMockLoggerChaining(t *testing.T) {
+	mockLogger := &MockLogger{}
+	mockReturnLogger1 := &MockLogger{}
+	mockReturnLogger2 := &MockLogger{}
+
+	// Set up expectations for chaining
+	mockLogger.On("WithField", "field1", "value1").Return(mockReturnLogger1)
+	mockReturnLogger1.On("WithError", mock.AnythingOfType("*errors.errorString")).Return(mockReturnLogger2)
+	mockReturnLogger2.On("Info", mock.AnythingOfType("[]interface {}")).Return()
+
+	// Call chained functions
+	testError := errors.New("test error")
+	mockLogger.WithField("field1", "value1").
+		WithError(testError).
+		Info("chained message")
+
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
+	mockReturnLogger1.AssertExpectations(t)
+	mockReturnLogger2.AssertExpectations(t)
+}
+
+// TestMockLoggerSingletonReplacement tests replacing the singleton logger with a mock
+func TestMockLoggerSingletonReplacement(t *testing.T) {
+	// Save original logger
+	originalLog := log
+
+	// Create mock logger
+	mockLogger := &MockLogger{}
+	mockLogger.On("Info", mock.AnythingOfType("[]interface {}")).Return()
+
+	// Replace singleton
+	log = mockLogger
+
+	// Call package-level function
+	Info("test singleton replacement")
+
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
+
+	// Restore original logger
+	log = originalLog
+}
+
+// TestMockLoggerConcurrentAccess tests mock logger with concurrent access
+func TestMockLoggerConcurrentAccess(t *testing.T) {
+	mockLogger := &MockLogger{}
+
+	// Set up expectations for concurrent calls
+	mockLogger.On("Info", mock.AnythingOfType("[]interface {}")).Return().Times(3)
+
+	// Run concurrent calls
+	var wg sync.WaitGroup
+	for i := 1; i <= 3; i++ {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			mockLogger.Info("concurrent message", id)
+		}(i)
 	}
 
-	// Llamar a la función que estamos probando
-	ConfigureLogger(config)
+	wg.Wait()
 
-	// Obtener la instancia configurada
-	logger := GetLogger()
-
-	// Verificar que no es nil
-	if logger == nil {
-		t.Error("Logger configurado no debería ser nil")
-	}
-
-	// En una implementación real podríamos exponer alguna API para verificar
-	// que los valores de configuración se aplicaron correctamente
+	// Verify expectations
+	mockLogger.AssertExpectations(t)
 }

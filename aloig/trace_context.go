@@ -10,25 +10,25 @@ import (
 type contextKey string
 
 const (
-	// TraceIDKey es la clave usada para el trace ID en el contexto
+	// TraceIDKey is the key used for trace ID in context
 	TraceIDKey contextKey = "trace_id"
 
-	// RequestIDKey es la clave usada para el ID de la petición en el contexto
+	// RequestIDKey is the key used for request ID in context
 	RequestIDKey contextKey = "request_id"
 
-	// UserIDKey es la clave usada para el ID del usuario en el contexto
+	// UserIDKey is the key used for user ID in context
 	UserIDKey contextKey = "user_id"
 
-	// SessionIDKey es la clave usada para el ID de sesión en el contexto
+	// SessionIDKey is the key used for session ID in context
 	SessionIDKey contextKey = "session_id"
 )
 
-// WithTraceID retorna un nuevo contexto con el trace ID especificado
+// WithTraceID returns a new context with the specified trace ID
 func WithTraceID(ctx context.Context, traceID string) context.Context {
 	return context.WithValue(ctx, TraceIDKey, traceID)
 }
 
-// GetTraceID obtiene el trace ID del contexto
+// GetTraceID gets the trace ID from context
 func GetTraceID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
@@ -40,8 +40,8 @@ func GetTraceID(ctx context.Context) string {
 	return traceID
 }
 
-// EnsureTraceID asegura que haya un trace ID en el contexto
-// Si no existe, crea uno nuevo
+// EnsureTraceID ensures there's a trace ID in the context
+// If it doesn't exist, creates a new one
 func EnsureTraceID(ctx context.Context) (context.Context, string) {
 	if ctx == nil {
 		ctx = context.Background()
@@ -56,17 +56,17 @@ func EnsureTraceID(ctx context.Context) (context.Context, string) {
 	return ctx, traceID
 }
 
-// GenerateTraceID genera un nuevo trace ID aleatorio
+// GenerateTraceID generates a new random trace ID
 func GenerateTraceID() string {
 	return strings.ReplaceAll(uuid.New().String(), "-", "")
 }
 
-// WithRequestID retorna un nuevo contexto con el ID de petición especificado
+// WithRequestID returns a new context with the specified request ID
 func WithRequestID(ctx context.Context, requestID string) context.Context {
 	return context.WithValue(ctx, RequestIDKey, requestID)
 }
 
-// GetRequestID obtiene el ID de petición del contexto
+// GetRequestID gets the request ID from context
 func GetRequestID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
@@ -78,12 +78,12 @@ func GetRequestID(ctx context.Context) string {
 	return requestID
 }
 
-// WithUserID retorna un nuevo contexto con el ID de usuario especificado
+// WithUserID returns a new context with the specified user ID
 func WithUserID(ctx context.Context, userID string) context.Context {
 	return context.WithValue(ctx, UserIDKey, userID)
 }
 
-// GetUserID obtiene el ID de usuario del contexto
+// GetUserID gets the user ID from context
 func GetUserID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
@@ -95,12 +95,12 @@ func GetUserID(ctx context.Context) string {
 	return userID
 }
 
-// WithSessionID retorna un nuevo contexto con el ID de sesión especificado
+// WithSessionID returns a new context with the specified session ID
 func WithSessionID(ctx context.Context, sessionID string) context.Context {
 	return context.WithValue(ctx, SessionIDKey, sessionID)
 }
 
-// GetSessionID obtiene el ID de sesión del contexto
+// GetSessionID gets the session ID from context
 func GetSessionID(ctx context.Context) string {
 	if ctx == nil {
 		return ""
@@ -112,7 +112,7 @@ func GetSessionID(ctx context.Context) string {
 	return sessionID
 }
 
-// ExtractContextFields extrae todos los campos de contexto en un mapa
+// ExtractContextFields extracts all context fields into a map
 func ExtractContextFields(ctx context.Context) map[string]interface{} {
 	fields := make(map[string]interface{})
 
